@@ -1,0 +1,64 @@
+name: Build Windows Portable
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build the self-contained EXE
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          try {
+            & .\scripts\Build-Portable.ps1
+          } catch {
+            Write-Error $_
+            exit 1
+          }
+          if (!(Test-Path '.\dist\MiSistemaPortable.exe')) {
+            throw 'El proceso no generó dist\MiSistemaPortable.exe.'
+          }
+      - name: Prepare downloadable artifacts
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path .\release-assets | Out-Null
+          Copy-Item .\dist\MiSistemaPortable.exe .\release-assets\MiSistemaPortable.exe -Force
+          Copy-Item .\THIRD_PARTY_NOTICES.md .\release-assets\THIRD_PARTY_NOTICES.md -Force
+      - name: Upload EXE as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MiSistemaPortable-Windows-x64
+          path: release-assets/*
+          if-no-files-found: error
+          retention-days: 14
+
+  attach-release-assets:
+    if: github.event_name == 'release' && github.event.action == 'published'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: MiSistemaPortable-Windows-x64
+          path: release-assets
+      - name: Attach EXE and notices to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release-assets/MiSistemaPortable.exe
+            release-assets/THIRD_PARTY_NOTICES.md

@@ -1,0 +1,6 @@
+# Runtime dependencies; build_portable.bat installs these into a temporary build venv.
+llama-cpp-python==0.3.36
+pydantic==2.11.7
+mcp==1.12.4
+PyYAML==6.0.2
+Telethon==1.40.0

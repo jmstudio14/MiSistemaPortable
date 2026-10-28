@@ -1,0 +1,20 @@
+app:
+  name: MiSistemaPortable
+  language: es
+  log_level: INFO
+
+model:
+  enabled: true
+  file: models/qwen2.5-0.5b-instruct-q4_k_m.gguf
+  context_size: 2048
+  threads: auto
+
+mcp:
+  enabled: true
+  server: desktop-commander
+  transport: stdio
+  telemetry_enabled: false
+
+telegram:
+  enabled: false
+  credentials_source: user_config

@@ -1,0 +1,30 @@
+version: 1
+
+macros:
+  listar_archivos:
+    enabled: true
+    description: Lista archivos de una carpeta.
+    requires_confirmation: false
+    action: list_files
+    mode: read_only
+
+  buscar_archivos:
+    enabled: true
+    description: Busca archivos por nombre en una carpeta.
+    requires_confirmation: false
+    action: search_files
+    mode: read_only
+
+  listar_herramientas_mcp:
+    enabled: true
+    description: Muestra las herramientas que expone Desktop Commander.
+    requires_confirmation: false
+    action: mcp_list_tools
+    mode: read_only
+
+  organizar_archivos:
+    enabled: false
+    description: Organiza archivos siguiendo reglas configuradas.
+    requires_confirmation: true
+    action: organize_files
+    mode: sensitive

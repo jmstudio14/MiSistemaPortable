@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.build-venv/
+
+# Build bootstrapper, caches, generated EXE and PyInstaller artifacts
+.build-tools/
+build/
+dist/
+*.spec.bak
+
+# Large downloaded/runtime assets (downloaded at build time)
+models/*.gguf
+models/*.download
+vendor/
+
+# Local writable state and secrets
+data/
+.env
+.env.*
+!.env.example
+*.session
+*.session-journal
+
+# Editor / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+*.log
